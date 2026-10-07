@@ -1,5 +1,6 @@
 package com.mxh.bn.Services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,33 @@ public class UserService {
             return false;
         }
 
+    }
+
+    public int getIdByUsernameAndPassword(String username, String password) {
+        try {
+            Optional<User> listUser = userRepo.findByUsername(username);
+            if (listUser.isPresent()) {
+                boolean isPassword = passwordEncoder.matches(password, listUser.get().getPassword());
+                if (isPassword) {
+                    return listUser.get().getId();
+                }
+            }
+            return -1;
+
+        } catch (Exception e) {
+            // TODO: handle exception
+            return -1;
+        }
+    }
+
+    public User getUserById(int id) {
+        try {
+            User user = userRepo.findById(id).get();
+            return user;
+        } catch (Exception e) {
+            // TODO: handle exception
+            return null;
+        }
     }
 
 }
